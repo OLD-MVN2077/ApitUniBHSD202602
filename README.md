@@ -1,6 +1,6 @@
-# Template de API RESTful (FastAPI + SQLite) - Monolito (Projeto A3)
+# API RESTful em Camadas (FastAPI + SQLite) - Projeto A4
 
-> 💡 **AVISO IMPORTANTE:** Este repositório contém a estrutura base desenvolvida para o **Projeto A3** em formato **monolítico**. Todo o ciclo de vida da aplicação — conexão com o banco, estruturação de dados e roteamento — está concentrado em um único arquivo (`main.py`). Ao final deste documento, há um guia prático de como evoluir esta base para o **Projeto A4**, adotando uma arquitetura em múltiplas camadas.
+Esta API foi organizada em múltiplas camadas: `database.py` contém a conexão e criação das tabelas, `models.py` define os contratos Pydantic e `main.py` inicializa o FastAPI e declara as rotas.
 
 Esta é uma API educacional desenvolvida em Python com o framework **FastAPI** e banco de dados relacional **SQLite**. Ela atende aos requisitos iniciais de persistência de dados e documentação automática, servindo como backend para integração com a UC de Usabilidade.
 
@@ -52,31 +52,4 @@ A API implementa o CRUD completo. Todos os endpoints estão definidos no arquivo
 * **PUT `/registros/{id}`**: Atualiza os dados de um registro existente (Status `200 OK` ou `404 Not Found`).
 * **DELETE `/registros/{id}`**: Exclui um registro do banco de dados (Status `200 OK` ou `404 Not Found`).
 
----
-
-## 🏗️ Guia de Evolução: Do Monolito (A3) para Múltiplas Camadas (A4)
-
-Manter todo o código em um único arquivo (`main.py`) é excelente para o aprendizado inicial e testes rápidos, mas torna a manutenção difícil conforme o sistema cresce. 
-
-Para o **Projeto A4**, o grupo deverá refatorar este monolito em uma **arquitetura de múltiplas camadas**. Siga estes passos para organizar a casa:
-
-1. **Isole o Banco de Dados (`database.py`)**
-   * Crie um novo arquivo chamado `database.py`.
-   * Mova para ele toda a lógica de conexão com o SQLite (a criação da `engine`, do `cursor` ou a configuração do ORM que estiverem usando) e a função que cria as tabelas iniciais.
-   * *Analogia:* Este será o almoxarifado exclusivo do seu sistema.
-
-2. **Separe os Contratos de Dados (`models.py`)**
-   * Crie um arquivo `models.py`.
-   * Recorte do seu `main.py` todas as classes que herdam de `BaseModel` do Pydantic (como `RegistroCreate`, `RegistroResponse`, etc.) e cole neste novo arquivo.
-   * *Analogia:* Este arquivo será o setor de controle de qualidade, ditando o que pode entrar ou sair do sistema.
-
-3. **Limpe as Rotas (`main.py`)**
-   * O seu `main.py` agora deve ficar muito mais limpo.
-   * Mantenha apenas a inicialização do FastAPI (`app = FastAPI()`) e as funções de rota (os `@app.get`, `@app.post`, etc.).
-   * No topo do `main.py`, importe os módulos que você acabou de criar:
-     ```python
-     from database import conectar_banco, criar_tabelas
-     from models import RegistroCreate, RegistroResponse
-     ```
-
-Após essa divisão, seu código estará preparado para escalar, integrando facilmente novas funcionalidades de segurança, como um proxy reverso Nginx, de forma totalmente estruturada e profissional.
+O ponto de entrada ASGI da aplicação é `main:app`.
